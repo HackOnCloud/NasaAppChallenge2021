@@ -1,5 +1,7 @@
 export const API_KEY = '';
 
+export const TITLE = 'You are my sunshine';
+
 export const COUNTRIES: Data[] = [
   // { name: 'Afghanistan', code: 'AF' },
   // { name: 'Aland Islands', code: 'AX' },
