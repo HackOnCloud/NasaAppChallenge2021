@@ -41,6 +41,7 @@ const Home: NextPage = () => {
 
   const addressId = 'address';
   const monthlyBillId = 'monthlyBill';
+  const solarPanelDurationId = 'solarPanelDuration';
 
   const inputProps: TextFieldProps = {
     required: true,
@@ -100,6 +101,7 @@ const Home: NextPage = () => {
 
   const handleSubmit = () => {
     const monthlybill = (document.getElementById(monthlyBillId) as HTMLInputElement).value;
+    const panelDuration = (document.getElementById(solarPanelDurationId) as HTMLInputElement).value;
     const paramsObj: Record<string, string> = {};
 
     if (provider) {
@@ -108,6 +110,10 @@ const Home: NextPage = () => {
 
     if (monthlybill) {
       paramsObj.monthlybill = monthlybill;
+    }
+
+    if (panelDuration) {
+      paramsObj.panelduration = panelDuration;
     }
 
     if (coordinate.lat && coordinate.lng) {
@@ -233,6 +239,22 @@ const Home: NextPage = () => {
                         },
                       }}
                     />
+                  </Box>
+
+                  <Box sx={{ mt: 4 }}>
+                    <TextField
+                      {...inputProps}
+                      label="Solar Panel Duration"
+                      id={solarPanelDurationId}
+                      type="number"
+                      InputProps={{
+                        inputProps: {
+                          min: 1,
+                          max: 25,
+                        },
+                      }}
+                    />
+                    <FormHelperText>Year from 1 year to 25 years</FormHelperText>
                   </Box>
 
                   <Box sx={{ mt: 2 }}>
