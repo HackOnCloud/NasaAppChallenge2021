@@ -13,8 +13,8 @@ is_region_default = 0
 
 def nasa_monthly_climatology_point(latitude: float = lat_default
             , longitude: float = long_default
-            , year_start: int = 2019
-            , year_end: int = 2020
+            , year_start: int = year_start_default
+            , year_end: int = year_end_default
             , parameters: str = parameter_climatology
             , is_region: int = is_region_default
             , latitude_max: float = lat_default+2
