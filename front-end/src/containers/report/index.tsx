@@ -1,6 +1,6 @@
 import Head from 'next/head';
-import { TITLE, recommends } from '../utils/constants';
-import { BarChart } from '../components/bar-chart'
+import { TITLE, recommends } from '../../utils/constants';
+import { BarChart } from '../../components/bar-chart'
 import {
   Card,
   CardHeader,
@@ -18,9 +18,19 @@ import {
   TableHead,
 } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
-import type { NextPage } from 'next';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-const Report: NextPage = () => {
+interface Props {
+  setStep: (step) => void;
+}
+
+const Report = (props: Props) => {
+
+  const handleBack = () => {
+    const { setStep } = props;
+    setStep(1);
+  }
+
   return (
     <div>
       <Head>
@@ -30,7 +40,13 @@ const Report: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Container maxWidth="sm" component="main" sx={{ my: 10 }}>
+
+      <Container maxWidth="sm" component="main">
+        <Box sx={{ py: 2 }}>
+          <IconButton onClick={handleBack}>
+            <ArrowBackIcon />
+          </IconButton>
+        </Box>
         <Paper elevation={0}>
           <Box sx={{ border: 1, borderRadius: 1, borderColor: '#dadce0' }}>
             <Card>
@@ -246,4 +262,4 @@ const Report: NextPage = () => {
   );
 };
 
-export default Report;
+export { Report };
