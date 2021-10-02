@@ -1,3 +1,5 @@
+export const API_KEY = '';
+
 export const COUNTRIES: Data[] = [
   // { name: 'Afghanistan', code: 'AF' },
   // { name: 'Aland Islands', code: 'AX' },
@@ -244,15 +246,13 @@ export const COUNTRIES: Data[] = [
   // { name: 'Zimbabwe', code: 'ZW' },
 ];
 
-export const SOLAR_PANEL_PROVIDERS: Data[] = [
-  { name: 'Sembcorp', code: 'sembcorp' }
-];
+export const SOLAR_PANEL_PROVIDERS: Data[] = [{ name: 'Sembcorp', code: 'sembcorp' }];
 
 export const PANEL_PROVIDER = {
   sembcorp: {
     price: '$0.1805',
-    monthlyBill: '$64.98'
-  }
+    monthlyBill: '$64.98',
+  },
 };
 
 interface Data {
