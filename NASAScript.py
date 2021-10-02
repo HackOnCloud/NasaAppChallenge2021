@@ -211,4 +211,47 @@ def nasa_monthly_climatology_point_optimal_yearly_angle_energy(latitude: float =
               ,'Number of months with this recommended angle':count
               ,'Total energy':energy,'Energy Definition':optimal_energy_monthly['Definition']}
     
-    return result            
+    return result
+
+def nasa_monthly_climatology_point_optimal_object(latitude: float = lat_default
+                                                        , longitude: float = long_default
+                                                        , year_start: int = year_start_default
+                                                        , year_end: int = year_end_default
+                                                         ) -> dict:
+    angle = nasa_monthly_climatology_point_optimal_angle(latitude=latitude
+                                                          ,longitude=longitude
+                                                          ,year_start=year_start
+                                                          ,year_end=year_end)
+    energy = nasa_monthly_climatology_point_optimal_energy(latitude=latitude
+                                                          ,longitude=longitude
+                                                          ,year_start=year_start
+                                                          ,year_end=year_end)
+    orientation = nasa_monthly_climatology_point_optimal_orientation(latitude=latitude
+                                                          ,longitude=longitude
+                                                          ,year_start=year_start
+                                                          ,year_end=year_end)
+    
+    def nasa_monthly_climatology_point_optimal_dict(month: str):
+        if month not in ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC']:
+            raise ValueError("month must be one of the following: 'JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'".format(month))
+        return {'angle':angle['Angle'][month]
+               ,'energy':energy['Optimal Energy'][month]
+               ,'orientation':orientation['Orientation'][month]}
+    
+    class OptimalObject():
+        
+        def __init__(self):
+            self.Jan = nasa_monthly_climatology_point_optimal_dict('JAN')
+            self.Feb = nasa_monthly_climatology_point_optimal_dict('FEB')
+            self.Mar = nasa_monthly_climatology_point_optimal_dict('MAR')
+            self.Apr = nasa_monthly_climatology_point_optimal_dict('APR')
+            self.May = nasa_monthly_climatology_point_optimal_dict('MAY')
+            self.Jun = nasa_monthly_climatology_point_optimal_dict('JUN')
+            self.Jul = nasa_monthly_climatology_point_optimal_dict('JUL')
+            self.Aug = nasa_monthly_climatology_point_optimal_dict('AUG')
+            self.Sep = nasa_monthly_climatology_point_optimal_dict('SEP')
+            self.Oct = nasa_monthly_climatology_point_optimal_dict('OCT')
+            self.Nov = nasa_monthly_climatology_point_optimal_dict('NOV')
+            self.Dec = nasa_monthly_climatology_point_optimal_dict('DEC')
+    
+    return json.dumps(OptimalObject(),default=lambda x:x.__dict__)
