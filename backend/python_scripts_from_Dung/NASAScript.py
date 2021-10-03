@@ -210,7 +210,7 @@ def nasa_monthly_climatology_point_optimal_orientation(latitude: float = lat_def
     if response != 200:
         raise RuntimeError('Core NASA API called unsuccessfully\nAPI response: {}\nError message: {}'.format(response
                                                                                                     ,error_message
-                                                                                                    ,link))
+                                                                                                    ))
 
     return {'Orientation':climatology_output['content']['properties']['parameter']['SI_EF_TILTED_SURFACE_OPTIMAL_ANG_ORT']
             ,'Definition':climatology_output['content']['parameters']['SI_EF_TILTED_SURFACE_OPTIMAL_ANG_ORT']}
@@ -238,7 +238,7 @@ def nasa_monthly_climatology_point_optimal_energy(latitude: float = lat_default
     if response != 200:
         raise RuntimeError('Core NASA API called unsuccessfully\nAPI response: {}\nError message: {}'.format(response
                                                                                                     ,error_message
-                                                                                                    ,link))    
+                                                                                                    ))    
 
     return {'Optimal Energy':climatology_output['content']['properties']['parameter']['SI_EF_TILTED_SURFACE_OPTIMAL']
             ,'Definition':climatology_output['content']['parameters']['SI_EF_TILTED_SURFACE_OPTIMAL']} 
@@ -266,7 +266,7 @@ def nasa_monthly_climatology_point_optimal_angle(latitude: float = lat_default
     if response != 200:
         raise RuntimeError('Core NASA API called unsuccessfully\nAPI response: {}\nError message: {}'.format(response
                                                                                                     ,error_message
-                                                                                                    ,link))    
+                                                                                                    ))    
     
     return {'Angle':climatology_output['content']['properties']['parameter']['SI_EF_TILTED_SURFACE_OPTIMAL_ANG']
             ,'Definition':climatology_output['content']['parameters']['SI_EF_TILTED_SURFACE_OPTIMAL_ANG']}
