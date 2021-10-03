@@ -1,0 +1,71 @@
+{
+  "savingPerMonth": 100,
+  "config": {
+    "cost": 100,
+    "maintenance": 1000,
+    "breakEven": 10
+  },
+  "recommends": [
+    {
+      "month": "Jan",
+      "angle": "5",
+      "orientation": "North"
+    },
+    {
+      "month": "Feb",
+      "angle": "5",
+      "orientation": "North"
+    },
+    {
+      "month": "Mar",
+      "angle": "5",
+      "orientation": "South"
+    },
+    {
+      "month": "Apr",
+      "angle": "5",
+      "orientation": "North",
+      "saving": "$100"
+    },
+    {
+      "month": "May",
+      "angle": "5",
+      "orientation": "North"
+    },
+    {
+      "month": "Jun",
+      "angle": "5",
+      "orientation": "North"
+    },
+    {
+      "month": "Jul",
+      "angle": "5",
+      "orientation": "South"
+    },
+    {
+      "month": "Aug",
+      "angle": "5",
+      "orientation": "South"
+    },
+    {
+      "month": "Sep",
+      "angle": "5",
+      "orientation": "South"
+    },
+    {
+      "month": "Oct",
+      "angle": "5",
+      "orientation": "South"
+    },
+    {
+      "month": "Nov",
+      "angle": "5",
+      "orientation": "South"
+    },
+    {
+      "month": "Dec",
+      "angle": "5",
+      "orientation": "South"
+    }
+  ]
+}

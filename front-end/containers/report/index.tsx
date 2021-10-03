@@ -105,6 +105,19 @@ const Report = (props: Props & EventProps) => {
                           </Typography>
                         </TableCell>
                       </TableRow>
+
+                      <TableRow>
+                        <TableCell>
+                          <Typography variant="h6" component="h6">
+                            Saving per month
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                          <Typography variant="body1" component="p">
+                            $100
+                          </Typography>
+                        </TableCell>
+                      </TableRow>
                     </TableBody>
                   </Table>
                 </TableContainer>
@@ -216,8 +229,7 @@ const Report = (props: Props & EventProps) => {
                       <TableRow>
                         <TableCell>Month</TableCell>
                         <TableCell align="right">Angle</TableCell>
-                        <TableCell align="right">Equator-facing orientation</TableCell>
-                        <TableCell align="right">Saving per month</TableCell>
+                        <TableCell align="right">Orientation</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -237,11 +249,6 @@ const Report = (props: Props & EventProps) => {
                             <TableCell align="right">
                               <Typography variant="body1" component="p">
                                 {item.orientation}
-                              </Typography>
-                            </TableCell>
-                            <TableCell align="right">
-                              <Typography variant="body1" component="p">
-                                {item.saving}
                               </Typography>
                             </TableCell>
                           </TableRow>
