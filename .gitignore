@@ -38,3 +38,7 @@ yarn-error.log*
 
 .env
 backend/SolarEnergyRecommendationLambdaFunction/src/SolarEnergyRecommendationLambdaFunction/obj
+backend/SolarEnergyRecommendationLambdaFunction/src/SolarEnergyRecommendationLambdaFunction/bin/Debug/*
+backend/SolarEnergyRecommendationLambdaFunction/src/SolarEnergyRecommendationLambdaFunction/bin/*
+backend/SolarEnergyRecommendationLambdaFunction/test/SolarEnergyRecommendationLambdaFunction.Tests/bin/*
+backend/SolarEnergyRecommendationLambdaFunction/test/SolarEnergyRecommendationLambdaFunction.Tests/obj/*
