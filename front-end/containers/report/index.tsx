@@ -288,7 +288,7 @@ const Report = (props: Props & EventProps) => {
                 <TabPanel value={tabIndex} index={0}>
                   <Card>
                     <CardContent>
-                      <SolarIrradianceByMonth />
+                      <SolarIrradianceByMonth lat={coordinate.lat} lng={coordinate.lng} />
                     </CardContent>
                   </Card>
                 </TabPanel>
@@ -296,7 +296,7 @@ const Report = (props: Props & EventProps) => {
                 <TabPanel value={tabIndex} index={1}>
                   <Card>
                     <CardContent>
-                      <SolarIrradianceByWeek />
+                      <SolarIrradianceByWeek lat={coordinate.lat} lng={coordinate.lng} />
                     </CardContent>
                   </Card>
                 </TabPanel>
@@ -313,7 +313,7 @@ const Report = (props: Props & EventProps) => {
                   }
                 />
                 <CardContent>
-                  <OptimalSolarRecommendation />
+                  <OptimalSolarRecommendation lat={coordinate.lat} lng={coordinate.lng} />
                 </CardContent>
               </Card>
             </Box>

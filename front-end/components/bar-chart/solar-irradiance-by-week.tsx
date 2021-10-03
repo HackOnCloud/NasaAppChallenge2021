@@ -1,6 +1,13 @@
 import { useEffect } from 'react';
 
-export function SolarIrradianceByWeek() {
+interface Props {
+  lat: number;
+  lng: number;
+}
+
+export function SolarIrradianceByWeek(props: Props) {
+  const { lat = 1.3, lng = 130 } = props;
+
   useEffect(() => {
     var divElement = document.getElementById('viz1633247930707');
     var vizElement = divElement.getElementsByTagName('object')[0];
@@ -47,8 +54,8 @@ export function SolarIrradianceByWeek() {
           <param name="display_count" value="yes" />
           <param name="language" value="en-US" />
           <param name="filter" value="publish=yes" />
-          <param name="filter" value="Latitude=1.3" />
-          <param name="filter" value="Longitude=130" />
+          <param name="filter" value={`Latitude=${lat}`} />
+          <param name="filter" value={`Longitude=${lng}`} />
         </object>
       </div>
     </div>

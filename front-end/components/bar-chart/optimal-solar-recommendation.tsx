@@ -1,6 +1,12 @@
 import { useEffect } from 'react';
 
-export function OptimalSolarRecommendation() {
+interface Props {
+  lat: number;
+  lng: number;
+}
+
+export function OptimalSolarRecommendation(props: Props) {
+  const { lat = 1.3, lng = 103 } = props;
   useEffect(() => {
     var divElement = document.getElementById('viz1633255846922');
     var vizElement = divElement.getElementsByTagName('object')[0];
@@ -55,8 +61,8 @@ export function OptimalSolarRecommendation() {
           <param name="display_count" value="yes" />
           <param name="language" value="en-US" />
           <param name="filter" value="publish=yes" />
-          <param name="filter" value="Latitude=1.3" />
-          <param name="filter" value="Longitude=103" />
+          <param name="filter" value={`Latitude=${lat}`} />
+          <param name="filter" value={`Longitude=${lng}`} />
         </object>
       </div>
     </div>
