@@ -1,0 +1,39 @@
+﻿<Properties StartupConfiguration="{C07579EA-340C-4EF8-B42F-6FAE2DDE8057}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="NASAPowerDataConnector/wwwroot/Examples/js/earthquakeMultilingual.js">
+    <Files>
+      <File FileName="NASAPowerDataConnector/wwwroot/Simulator/wdc-simulator.js" Line="1" Column="1" />
+      <File FileName="NASAPowerDataConnector/wwwroot/Simulator/index.html" Line="1" Column="1" />
+      <File FileName="NASAPowerDataConnector/wwwroot/Examples/html/earthquakeMultilingual.html" Line="11" Column="77" />
+      <File FileName="NASAPowerDataConnector/wwwroot/Examples/js/earthquakeMultilingual.js" Line="1" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="NASAPowerDataConnector" expanded="True">
+            <Node name="NASAPowerDataConnector" expanded="True">
+              <Node name="Pages" expanded="True" />
+              <Node name="wwwroot" expanded="True">
+                <Node name="Examples" expanded="True">
+                  <Node name="html" expanded="True" />
+                  <Node name="js" expanded="True">
+                    <Node name="earthquakeMultilingual.js" selected="True" />
+                  </Node>
+                </Node>
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.NASAPowerDataConnector PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
