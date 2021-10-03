@@ -28,7 +28,6 @@ import { PrimaryHeader } from '../../components/header';
 import { GeographicCoordinate } from '../../utils/interface';
 import { EMPTY_WARNING_MESSAGE } from '../../utils/constants';
 
-
 interface Props {
   country?: string;
   address?: string;
@@ -50,12 +49,18 @@ interface EvenProps {
 
 const Form = (props: Props & EvenProps) => {
   const {
-    country, setCountry,
-    address, setAddress,
-    provider, setProvider,
-    averageBill, setAverageBill,
-    duration, setDuration,
-    coordinate, setCoordinate,
+    country,
+    setCountry,
+    address,
+    setAddress,
+    provider,
+    setProvider,
+    averageBill,
+    setAverageBill,
+    duration,
+    setDuration,
+    coordinate,
+    setCoordinate,
   } = props;
 
   const [errorAddress, setErrorAddress] = useState(null);
@@ -87,12 +92,12 @@ const Form = (props: Props & EvenProps) => {
     if (country) {
       options['componentRestrictions'] = {
         country,
-      }
+      };
     }
 
     const autocomplete = new google.maps.places.Autocomplete(input, options);
     setAutoComplete(autocomplete);
-    autocomplete.setComponentRestrictions
+    autocomplete.setComponentRestrictions;
 
     autocomplete.addListener('place_changed', () => {
       const {
@@ -102,11 +107,11 @@ const Form = (props: Props & EvenProps) => {
         name,
         formatted_address,
       } = autocomplete.getPlace();
-      console.log(autocomplete.getPlace())
+      console.log(autocomplete.getPlace());
       setAddress(`${name} - ${formatted_address}`);
       setCoordinate({ lat: lat(), lng: lng() });
     });
-  }
+  };
 
   useEffect(() => {
     if (!window.google) {
@@ -121,10 +126,9 @@ const Form = (props: Props & EvenProps) => {
   const theme = useTheme();
   const isAboveSm = useMediaQuery(theme.breakpoints.up('sm'));
 
-
   const isDisableSubmitButton = () => {
     return errorAddress || errorAvgBill || errorSolarPanelProvider || errorDuration;
-  }
+  };
 
   const handleChangeCountry = (e) => {
     setCountry(e.target.value);
@@ -147,7 +151,7 @@ const Form = (props: Props & EvenProps) => {
       isInvalid = true;
     }
     setErrorAddress(isInvalid);
-  }
+  };
 
   const handleChangeAvgBill = (e) => {
     setAverageBill(e.target.value);
@@ -157,7 +161,7 @@ const Form = (props: Props & EvenProps) => {
       isInvalid = true;
     }
     setErrorAvgBill(isInvalid);
-  }
+  };
 
   const handleChangeProvider = (e) => {
     setProvider(e.target.value);
@@ -180,6 +184,27 @@ const Form = (props: Props & EvenProps) => {
   };
 
   const handleSubmit = () => {
+    let isInvalid = false;
+    if (!address) {
+      isInvalid = true;
+      setErrorAddress(true);
+    }
+
+    if (!averageBill) {
+      isInvalid = true;
+      setErrorAvgBill(true);
+    }
+
+    if (!provider) {
+      isInvalid = true;
+      setErrorSolarPanelProvider(true);
+    }
+
+    if (!duration) {
+      isInvalid = true;
+      setErrorDuration(true);
+    }
+
     const { setStep } = props;
     const monthlybill = (document.getElementById(monthlyBillId) as HTMLInputElement).value;
     const panelDuration = (document.getElementById(solarPanelDurationId) as HTMLInputElement).value;
@@ -205,6 +230,7 @@ const Form = (props: Props & EvenProps) => {
     const searchParams = new URLSearchParams(paramsObj);
 
     console.log(searchParams.toString());
+    // !isInvalid && setStep(FORM_STEP.SECOND);
     setStep(FORM_STEP.SECOND);
   };
 
@@ -281,7 +307,6 @@ const Form = (props: Props & EvenProps) => {
                         value={address}
                         onChange={handleChangeAddress}
                         label="Home Address"
-                        helperText={errorAddress && EMPTY_WARNING_MESSAGE}
                       />
                       {errorAddress && <FormHelperText error>{EMPTY_WARNING_MESSAGE}</FormHelperText>}
                     </Box>
@@ -328,28 +353,26 @@ const Form = (props: Props & EvenProps) => {
                             </MenuItem>
                           ))}
                         </Select>
-                        <FormHelperText>
-                          Select your preferred providers in your country
-                        </FormHelperText>
-                        {errorSolarPanelProvider && <FormHelperText error>{EMPTY_WARNING_MESSAGE}</FormHelperText>}
-
-                        {detailRetailer && (
-                          <>
-                            <FormHelperText>
-                              Installation cost: {detailRetailer.price} / m<sup>2</sup>
-                            </FormHelperText>
-                            <FormHelperText>
-                              Maintenance cost: {detailRetailer.monthlyBill} / m<sup>2</sup>
-                            </FormHelperText>
-                          </>
-                        )}
                       </FormControl>
+                      <FormHelperText>Select your preferred providers in your country</FormHelperText>
+                      {errorSolarPanelProvider && <FormHelperText error>{EMPTY_WARNING_MESSAGE}</FormHelperText>}
+
+                      {detailRetailer && (
+                        <>
+                          <FormHelperText>
+                            Installation cost: {detailRetailer.price} / m<sup>2</sup>
+                          </FormHelperText>
+                          <FormHelperText>
+                            Maintenance cost: {detailRetailer.monthlyBill} / m<sup>2</sup>
+                          </FormHelperText>
+                        </>
+                      )}
                     </Box>
 
                     <Box sx={{ mt: 4 }}>
                       <TextField
                         {...inputProps}
-                        label="Expected duration of solar panel"
+                        label="Duration of solar panel"
                         id={solarPanelDurationId}
                         type="number"
                         error={errorDuration}

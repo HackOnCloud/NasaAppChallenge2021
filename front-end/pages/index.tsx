@@ -17,7 +17,7 @@ const Home: NextPage = () => {
 
   return (
     <>
-      {step === 1 &&
+      {step === 1 && (
         <Form
           country={country}
           address={address}
@@ -32,15 +32,12 @@ const Home: NextPage = () => {
           setAverageBill={setAverageBill}
           setDuration={setDuration}
           setCoordinate={setCoordinate}
-        />}
+        />
+      )}
 
-      {step === 2 &&
-        <Report
-          address={address}
-          provider={provider}
-          averageBill={averageBill}
-          setStep={handleGotoStep}
-        />}
+      {step === 2 && (
+        <Report address={address} provider={provider} averageBill={averageBill} setStep={handleGotoStep} />
+      )}
     </>
   );
 };

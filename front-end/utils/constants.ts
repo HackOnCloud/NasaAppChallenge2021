@@ -4,7 +4,7 @@ export const TITLE = 'You are my sunshine';
 
 export const EMPTY_WARNING_MESSAGE = 'This field cannot be empty';
 
-export const MAIN_COLOR = '#556cd6'
+export const MAIN_COLOR = '#556cd6';
 
 export const TEAM_NAME = 'HackOnCloud';
 

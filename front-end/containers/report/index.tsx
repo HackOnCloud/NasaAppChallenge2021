@@ -1,6 +1,11 @@
 import Head from 'next/head';
 import { TITLE, recommends, FORM_STEP } from '../../utils/constants';
-import { BarChartByMonth, BarChartByWeek } from '../../components/bar-chart';
+import {
+  SolarIrradianceByMonth,
+  SolarIrradianceByWeek,
+  OptimalSolarRecommendation,
+  PotentialSolarGenerationInYourRegion,
+} from '../../components/bar-chart';
 import {
   Card,
   CardHeader,
@@ -20,9 +25,11 @@ import {
   Tab,
 } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
-import { SecondaryHeader } from '../../components/header'
+import { SecondaryHeader } from '../../components/header';
 import React, { useEffect } from 'react';
 import { TabPanel } from '../../components/tab-panel';
+import { AlertDialog } from '../../components/dialog';
+import { fetchData } from '../../api/fetch-data';
 
 interface Props {
   address: string;
@@ -35,7 +42,9 @@ interface EventProps {
 }
 
 const Report = (props: Props & EventProps) => {
+  const [data, setData] = React.useState(null);
   const [tabIndex, setTabIndex] = React.useState(0);
+  const [openDialog, setOpenDialog] = React.useState(false);
   const { address, provider, averageBill } = props;
   const handleBack = () => {
     const { setStep } = props;
@@ -43,10 +52,22 @@ const Report = (props: Props & EventProps) => {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+    async function getData() {
+      const data = await fetchData();
+      setData(data);
+    }
+    getData();
   }, []);
+
+  console.log(data);
 
   const handleChangeTab = (event: React.SyntheticEvent, newValue: number) => {
     setTabIndex(newValue);
+  };
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
   };
 
   return (
@@ -81,7 +102,9 @@ const Report = (props: Props & EventProps) => {
                           </Typography>
                         </TableCell>
                         <TableCell align="right">
-                          <Typography variant="body1" component="p">{address}</Typography>
+                          <Typography variant="body1" component="p">
+                            {address}
+                          </Typography>
                         </TableCell>
                       </TableRow>
 
@@ -92,7 +115,9 @@ const Report = (props: Props & EventProps) => {
                           </Typography>
                         </TableCell>
                         <TableCell align="right">
-                          <Typography variant="body1" component="p">{provider}</Typography>
+                          <Typography variant="body1" component="p">
+                            {provider}
+                          </Typography>
                         </TableCell>
                       </TableRow>
 
@@ -216,15 +241,15 @@ const Report = (props: Props & EventProps) => {
           </Box>
 
           <Box sx={{ border: 1, borderRadius: 1, borderColor: '#dadce0', mt: 2 }}>
-
             <Card>
               <CardHeader
                 title={
                   <Typography component="p" sx={{ textTransform: 'uppercase' }}>
                     Sunshine in your area
-                  </Typography>}
+                  </Typography>
+                }
               />
-              <Tabs value={tabIndex} onChange={handleChangeTab} >
+              <Tabs value={tabIndex} onChange={handleChangeTab}>
                 <Tab label="By Month" />
                 <Tab label="By Week" />
               </Tabs>
@@ -232,7 +257,7 @@ const Report = (props: Props & EventProps) => {
               <TabPanel value={tabIndex} index={0}>
                 <Card>
                   <CardContent>
-                    <BarChartByMonth />
+                    <SolarIrradianceByMonth />
                   </CardContent>
                 </Card>
               </TabPanel>
@@ -240,7 +265,7 @@ const Report = (props: Props & EventProps) => {
               <TabPanel value={tabIndex} index={1}>
                 <Card>
                   <CardContent>
-                    <BarChartByWeek />
+                    <SolarIrradianceByWeek />
                   </CardContent>
                 </Card>
               </TabPanel>
@@ -250,13 +275,30 @@ const Report = (props: Props & EventProps) => {
           <Box sx={{ border: 1, borderRadius: 1, borderColor: '#dadce0', mt: 2 }}>
             <Card>
               <CardHeader
+                title={
+                  <Typography component="p" sx={{ textTransform: 'uppercase' }}>
+                    Optimal Solar Recommendation
+                  </Typography>
+                }
+              />
+              <CardContent>
+                <OptimalSolarRecommendation />
+              </CardContent>
+            </Card>
+          </Box>
+
+          <Box sx={{ border: 1, borderRadius: 1, borderColor: '#dadce0', mt: 2 }}>
+            <Card>
+              <CardHeader
                 action={
-                  <IconButton>
+                  <IconButton onClick={handleOpenDialog}>
                     <InfoIcon />
                   </IconButton>
                 }
                 title={
-                  <Typography component="p" sx={{ textTransform: 'uppercase' }}>Recommended angle setup</Typography>
+                  <Typography component="p" sx={{ textTransform: 'uppercase' }}>
+                    Recommended angle setup
+                  </Typography>
                 }
               />
               <CardContent sx={{ textAlign: 'center' }}>
@@ -297,8 +339,25 @@ const Report = (props: Props & EventProps) => {
               </CardContent>
             </Card>
           </Box>
+
+
+          <Box sx={{ border: 1, borderRadius: 1, borderColor: '#dadce0', mt: 2 }}>
+            <Card>
+              <CardHeader
+                title={
+                  <Typography component="p" sx={{ textTransform: 'uppercase' }}>
+                    Potential Solar Generation In The Region
+                  </Typography>
+                }
+              />
+              <CardContent>
+                <PotentialSolarGenerationInYourRegion />
+              </CardContent>
+            </Card>
+          </Box>
         </Paper>
       </Container>
+      <AlertDialog open={openDialog} setOpen={setOpenDialog} />
     </div>
   );
 };
