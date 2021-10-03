@@ -9,7 +9,7 @@ const Home: NextPage = () => {
   const [country, setCountry] = useState('');
   const [provider, setProvider] = useState('');
   const [averageBill, setAverageBill] = useState('');
-  const [duration, setDuration] = useState('');
+  const [duration, setDuration] = useState(1);
   const [address, setAddress] = useState('');
   const [coordinate, setCoordinate] = useState<GeographicCoordinate>({});
 
@@ -36,7 +36,14 @@ const Home: NextPage = () => {
       )}
 
       {step === 2 && (
-        <Report address={address} provider={provider} averageBill={averageBill} setStep={handleGotoStep} />
+        <Report
+          address={address}
+          provider={provider}
+          averageBill={averageBill}
+          duration={duration}
+          coordinate={coordinate}
+          setStep={handleGotoStep}
+        />
       )}
     </>
   );

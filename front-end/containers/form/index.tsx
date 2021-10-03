@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import styles from '../../styles/Home.module.css';
 import { API_KEY, FORM_STEP, TITLE, COUNTRIES, SOLAR_PANEL_PROVIDERS, PANEL_PROVIDER } from '../../utils/constants';
 import {
   Button,
@@ -34,7 +32,7 @@ interface Props {
   coordinate?: GeographicCoordinate;
   averageBill?: string;
   provider?: string;
-  duration?: string;
+  duration?: number;
 }
 
 interface EvenProps {
@@ -107,7 +105,6 @@ const Form = (props: Props & EvenProps) => {
         name,
         formatted_address,
       } = autocomplete.getPlace();
-      console.log(autocomplete.getPlace());
       setAddress(`${name} - ${formatted_address}`);
       setCoordinate({ lat: lat(), lng: lng() });
     });
@@ -124,7 +121,6 @@ const Form = (props: Props & EvenProps) => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const theme = useTheme();
-  const isAboveSm = useMediaQuery(theme.breakpoints.up('sm'));
 
   const isDisableSubmitButton = () => {
     return errorAddress || errorAvgBill || errorSolarPanelProvider || errorDuration;
@@ -227,11 +223,7 @@ const Form = (props: Props & EvenProps) => {
       paramsObj.lng = coordinate.lng.toString();
     }
 
-    const searchParams = new URLSearchParams(paramsObj);
-
-    console.log(searchParams.toString());
     !isInvalid && setStep(FORM_STEP.SECOND);
-    // setStep(FORM_STEP.SECOND);
   };
 
   const detailRetailer = PANEL_PROVIDER[provider];
@@ -239,7 +231,7 @@ const Form = (props: Props & EvenProps) => {
   return (
     <>
       <PrimaryHeader />
-      <Box className={styles.container} sx={{ my: 4 }}>
+      <Box sx={{ my: 4 }}>
         <Head>
           <title>{TITLE}</title>
           <meta name="description" content={TITLE} />
@@ -251,12 +243,10 @@ const Form = (props: Props & EvenProps) => {
           <Paper elevation={0}>
             <Box sx={{ border: 1, borderRadius: 1, borderColor: '#dadce0' }}>
               <Grid container spacing={2}>
-                <Grid item xs={isAboveSm ? 6 : 12} sx={{ my: isAboveSm ? 4 : 0 }}>
-                  {!isAboveSm && (
-                    <Box>
-                      <CardMedia component="img" className={style.img} image="/images/solar-3.jpeg" alt={TITLE} />
-                    </Box>
-                  )}
+                <Grid item xs={12} sx={{ my: 0 }}>
+                  <Box>
+                    <CardMedia component="img" className={style.img} image="/images/solar-3.jpeg" alt={TITLE} />
+                  </Box>
 
                   <Box sx={{ px: 2, pt: 2 }}>
                     <Typography variant="h6" component="h6">
@@ -386,7 +376,7 @@ const Form = (props: Props & EvenProps) => {
                           endAdornment: <InputAdornment position="end">year(s)</InputAdornment>,
                         }}
                       />
-                      <FormHelperText>Ranging from 10 - 25 years.</FormHelperText>
+                      <FormHelperText>Ranging on average from 10 - 25 years.</FormHelperText>
                       {errorDuration && <FormHelperText error>{EMPTY_WARNING_MESSAGE}</FormHelperText>}
                     </Box>
 
@@ -397,12 +387,6 @@ const Form = (props: Props & EvenProps) => {
                     </Box>
                   </CardContent>
                 </Grid>
-
-                {isAboveSm && (
-                  <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <img className={style.img} src="/images/solar-2.jpeg" alt={TITLE} />
-                  </Grid>
-                )}
               </Grid>
             </Box>
           </Paper>

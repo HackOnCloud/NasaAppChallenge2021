@@ -28,12 +28,11 @@ export function AlertDialog(props: Props & EventProps) {
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">
-        RECOMMENDED ANGLE SETUP
-      </DialogTitle>
+      <DialogTitle id="alert-dialog-title">RECOMMENDED ANGLE SETUP</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          For example, If you see 5 in Angle & North in Orientation, you should adjust the panel such that it is 5 degree titled, and that the surface of the panel pointed towards the North
+          For example, If you see 5 in Angle & North in Orientation, you should adjust the panel such that it is 5
+          degree titled, and that the surface of the panel pointed towards the North
         </DialogContentText>
       </DialogContent>
       <DialogActions>

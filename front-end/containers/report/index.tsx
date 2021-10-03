@@ -1,10 +1,10 @@
 import Head from 'next/head';
-import { TITLE, recommends, FORM_STEP } from '../../utils/constants';
+import { TITLE, FORM_STEP } from '../../utils/constants';
 import {
   SolarIrradianceByMonth,
   SolarIrradianceByWeek,
   OptimalSolarRecommendation,
-  PotentialSolarGenerationInYourRegion,
+  // PotentialSolarGenerationInYourRegion,
 } from '../../components/bar-chart';
 import {
   Card,
@@ -25,16 +25,20 @@ import {
   Tab,
 } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
+import CircularProgress from '@mui/material/CircularProgress';
 import { SecondaryHeader } from '../../components/header';
 import React, { useEffect } from 'react';
 import { TabPanel } from '../../components/tab-panel';
 import { AlertDialog } from '../../components/dialog';
 import { fetchData } from '../../api/fetch-data';
+import { GeographicCoordinate } from '../../utils/interface';
 
 interface Props {
   address: string;
   provider: string;
   averageBill: string;
+  duration: number;
+  coordinate: GeographicCoordinate;
 }
 
 interface EventProps {
@@ -42,25 +46,45 @@ interface EventProps {
 }
 
 const Report = (props: Props & EventProps) => {
+  const [loading, setLoading] = React.useState(false);
   const [data, setData] = React.useState(null);
   const [tabIndex, setTabIndex] = React.useState(0);
   const [openDialog, setOpenDialog] = React.useState(false);
-  const { address, provider, averageBill } = props;
+  const { address, provider, averageBill, duration, coordinate } = props;
+
   const handleBack = () => {
     const { setStep } = props;
     setStep(FORM_STEP.FIRST);
   };
 
+  const toFixed2 = (num) => Number(num.toFixed(2));
+  const toDolar = (val) =>
+    val.toLocaleString('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    });
+
   useEffect(() => {
     window.scrollTo(0, 0);
     async function getData() {
-      const data = await fetchData();
+      setLoading(true);
+
+      const { lat, lng } = coordinate;
+      const monthlybill = parseFloat(averageBill);
+
+      const data = await fetchData({
+        lat,
+        lng,
+        provider,
+        monthlybill,
+        duration: parseInt(duration.toString()),
+      });
+
       setData(data);
+      setLoading(false);
     }
     getData();
-  }, []);
-
-  console.log(data);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleChangeTab = (event: React.SyntheticEvent, newValue: number) => {
     setTabIndex(newValue);
@@ -81,267 +105,273 @@ const Report = (props: Props & EventProps) => {
 
       <SecondaryHeader onClick={handleBack} />
       <Container maxWidth="md" component="main" sx={{ my: 4 }}>
-        <Paper elevation={0}>
-          <Box sx={{ border: 1, borderRadius: 1, borderColor: '#dadce0' }}>
-            <Card>
-              <CardHeader
-                title={
-                  <Typography component="p" sx={{ textTransform: 'uppercase' }}>
-                    What we know about you
-                  </Typography>
-                }
-              />
-              <CardContent sx={{ textAlign: 'center' }}>
-                <TableContainer>
-                  <Table>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell>
-                          <Typography variant="h6" component="h6">
-                            Location
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="right">
-                          <Typography variant="body1" component="p">
-                            {address}
-                          </Typography>
-                        </TableCell>
-                      </TableRow>
-
-                      <TableRow>
-                        <TableCell>
-                          <Typography variant="h6" component="h6">
-                            Solar provider
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="right">
-                          <Typography variant="body1" component="p">
-                            {provider}
-                          </Typography>
-                        </TableCell>
-                      </TableRow>
-
-                      <TableRow>
-                        <TableCell>
-                          <Typography variant="h6" component="h6">
-                            Average monthly electric bill
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="right">
-                          <Typography variant="body1" component="p">
-                            ${averageBill || 0}
-                          </Typography>
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </CardContent>
-            </Card>
+        {loading && (
+          <Box sx={{ textAlign: 'center' }}>
+            <CircularProgress />
           </Box>
+        )}
 
-          <Box sx={{ border: 1, borderRadius: 1, borderColor: '#dadce0', mt: 2 }}>
-            <Card>
-              <CardHeader
-                title={
-                  <Typography component="p" sx={{ textTransform: 'uppercase' }}>
-                    Setup to cover your needs
-                  </Typography>
-                }
-              />
-              <CardContent sx={{ textAlign: 'center' }}>
-                <TableContainer>
-                  <Table>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell>
-                          <Typography variant="h6" component="h6">
-                            Solar panel area
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="right">
-                          <Typography variant="body1" component="p">
-                            100m<sup>2</sup>
-                          </Typography>
-                        </TableCell>
-                      </TableRow>
+        {data && (
+          <Paper elevation={0}>
+            <Box sx={{ border: 1, borderRadius: 1, borderColor: '#dadce0' }}>
+              <Card>
+                <CardHeader
+                  title={
+                    <Typography component="p" sx={{ textTransform: 'uppercase' }}>
+                      What we know about you
+                    </Typography>
+                  }
+                />
+                <CardContent sx={{ textAlign: 'center' }}>
+                  <TableContainer>
+                    <Table>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell>
+                            <Typography variant="h6" component="h6">
+                              Location
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="right">
+                            <Typography variant="body1" component="p">
+                              {address}
+                            </Typography>
+                          </TableCell>
+                        </TableRow>
 
-                      <TableRow>
-                        <TableCell>
-                          <Typography variant="h6" component="h6">
-                            Number of solar panels
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="right">
-                          <Typography variant="body1" component="p">
-                            5
-                          </Typography>
-                        </TableCell>
-                      </TableRow>
+                        <TableRow>
+                          <TableCell>
+                            <Typography variant="h6" component="h6">
+                              Solar provider
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="right">
+                            <Typography variant="body1" component="p">
+                              {provider.toUpperCase()}
+                            </Typography>
+                          </TableCell>
+                        </TableRow>
 
-                      <TableRow>
-                        <TableCell>
-                          <Typography variant="h6" component="h6">
-                            Cost
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="right">
-                          <Typography variant="body1" component="p">
-                            $1000
-                          </Typography>
-                        </TableCell>
-                      </TableRow>
+                        <TableRow>
+                          <TableCell>
+                            <Typography variant="h6" component="h6">
+                              Average monthly electric bill
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="right">
+                            <Typography variant="body1" component="p">
+                              {toDolar(parseFloat(averageBill) || 0)}
+                            </Typography>
+                          </TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </CardContent>
+              </Card>
+            </Box>
 
-                      <TableRow>
-                        <TableCell>
-                          <Typography variant="h6" component="h6">
-                            Maintenance
-                          </Typography>
-                          <Typography variant="subtitle1" component="span">
-                            Once every year
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="right">
-                          <Typography variant="body1" component="p">
-                            $1000
-                          </Typography>
-                        </TableCell>
-                      </TableRow>
+            <Box sx={{ border: 1, borderRadius: 1, borderColor: '#dadce0', mt: 2 }}>
+              <Card>
+                <CardHeader
+                  title={
+                    <Typography component="p" sx={{ textTransform: 'uppercase' }}>
+                      Setup to cover your needs
+                    </Typography>
+                  }
+                />
+                <CardContent sx={{ textAlign: 'center' }}>
+                  <TableContainer>
+                    <Table>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell>
+                            <Typography variant="h6" component="h6">
+                              Solar panel area
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="right">
+                            <Typography variant="body1" component="p">
+                              {toFixed2(data.config.totalPanelSize)}m<sup>2</sup>
+                            </Typography>
+                          </TableCell>
+                        </TableRow>
 
-                      <TableRow>
-                        <TableCell>
-                          <Typography variant="h6" component="h6">
-                            Saving per month
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="right">
-                          <Typography variant="body1" component="p">
-                            $100
-                          </Typography>
-                        </TableCell>
-                      </TableRow>
+                        <TableRow>
+                          <TableCell>
+                            <Typography variant="h6" component="h6">
+                              Number of solar panels
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="right">
+                            <Typography variant="body1" component="p">
+                              {toFixed2(data.config.recommendedPanelPerMonth)}
+                            </Typography>
+                          </TableCell>
+                        </TableRow>
 
-                      <TableRow>
-                        <TableCell>
-                          <Typography variant="h6" component="h6">
-                            Break-even
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="right">
-                          <Typography variant="body1" component="p">
-                            10 months
-                          </Typography>
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </CardContent>
-            </Card>
-          </Box>
+                        <TableRow>
+                          <TableCell>
+                            <Typography variant="h6" component="h6">
+                              Cost
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="right">
+                            <Typography variant="body1" component="p">
+                              {toDolar(data.config.cost)}
+                            </Typography>
+                          </TableCell>
+                        </TableRow>
 
-          <Box sx={{ border: 1, borderRadius: 1, borderColor: '#dadce0', mt: 2 }}>
-            <Card>
-              <CardHeader
-                title={
-                  <Typography component="p" sx={{ textTransform: 'uppercase' }}>
-                    Sunshine in your area
-                  </Typography>
-                }
-              />
-              <Tabs value={tabIndex} onChange={handleChangeTab}>
-                <Tab label="By Month" />
-                <Tab label="By Week" />
-              </Tabs>
+                        <TableRow>
+                          <TableCell>
+                            <Typography variant="h6" component="h6">
+                              Maintenance
+                            </Typography>
+                            <Typography variant="subtitle1" component="span">
+                              Once every year
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="right">
+                            <Typography variant="body1" component="p">
+                              {toDolar(data.config.maintenance)}
+                            </Typography>
+                          </TableCell>
+                        </TableRow>
 
-              <TabPanel value={tabIndex} index={0}>
-                <Card>
-                  <CardContent>
-                    <SolarIrradianceByMonth />
-                  </CardContent>
-                </Card>
-              </TabPanel>
+                        <TableRow>
+                          <TableCell>
+                            <Typography variant="h6" component="h6">
+                              Net saving
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="right">
+                            <Typography variant="body1" component="p">
+                              {toDolar(data.config.totalSaving)}
+                            </Typography>
+                          </TableCell>
+                        </TableRow>
 
-              <TabPanel value={tabIndex} index={1}>
-                <Card>
-                  <CardContent>
-                    <SolarIrradianceByWeek />
-                  </CardContent>
-                </Card>
-              </TabPanel>
-            </Card>
-          </Box>
+                        <TableRow>
+                          <TableCell>
+                            <Typography variant="h6" component="h6">
+                              Break-even
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="right">
+                            <Typography variant="body1" component="p">
+                              {parseInt(data.config.breakEvenInYear)} year(s)
+                            </Typography>
+                          </TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </CardContent>
+              </Card>
+            </Box>
 
-          <Box sx={{ border: 1, borderRadius: 1, borderColor: '#dadce0', mt: 2 }}>
-            <Card>
-              <CardHeader
-                title={
-                  <Typography component="p" sx={{ textTransform: 'uppercase' }}>
-                    Optimal Solar Recommendation
-                  </Typography>
-                }
-              />
-              <CardContent>
-                <OptimalSolarRecommendation />
-              </CardContent>
-            </Card>
-          </Box>
+            <Box sx={{ border: 1, borderRadius: 1, borderColor: '#dadce0', mt: 2 }}>
+              <Card>
+                <CardHeader
+                  title={
+                    <Typography component="p" sx={{ textTransform: 'uppercase' }}>
+                      Sunshine in your area
+                    </Typography>
+                  }
+                />
+                <Tabs value={tabIndex} onChange={handleChangeTab}>
+                  <Tab label="By Month" />
+                  <Tab label="By Week" />
+                </Tabs>
 
-          <Box sx={{ border: 1, borderRadius: 1, borderColor: '#dadce0', mt: 2 }}>
-            <Card>
-              <CardHeader
-                action={
-                  <IconButton onClick={handleOpenDialog}>
-                    <InfoIcon />
-                  </IconButton>
-                }
-                title={
-                  <Typography component="p" sx={{ textTransform: 'uppercase' }}>
-                    Recommended angle setup
-                  </Typography>
-                }
-              />
-              <CardContent sx={{ textAlign: 'center' }}>
-                <TableContainer>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Month</TableCell>
-                        <TableCell align="right">Angle</TableCell>
-                        <TableCell align="right">Orientation</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {recommends.map((item, index) => {
-                        return (
-                          <TableRow key={index}>
-                            <TableCell>
-                              <Typography variant="body1" component="p">
-                                {item.month}
-                              </Typography>
-                            </TableCell>
-                            <TableCell align="right">
-                              <Typography variant="body1" component="p">
-                                {item.angle}
-                              </Typography>
-                            </TableCell>
-                            <TableCell align="right">
-                              <Typography variant="body1" component="p">
-                                {item.orientation}
-                              </Typography>
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </CardContent>
-            </Card>
-          </Box>
+                <TabPanel value={tabIndex} index={0}>
+                  <Card>
+                    <CardContent>
+                      <SolarIrradianceByMonth />
+                    </CardContent>
+                  </Card>
+                </TabPanel>
 
+                <TabPanel value={tabIndex} index={1}>
+                  <Card>
+                    <CardContent>
+                      <SolarIrradianceByWeek />
+                    </CardContent>
+                  </Card>
+                </TabPanel>
+              </Card>
+            </Box>
 
-          <Box sx={{ border: 1, borderRadius: 1, borderColor: '#dadce0', mt: 2 }}>
+            <Box sx={{ border: 1, borderRadius: 1, borderColor: '#dadce0', mt: 2 }}>
+              <Card>
+                <CardHeader
+                  title={
+                    <Typography component="p" sx={{ textTransform: 'uppercase' }}>
+                      Optimal Solar Recommendation
+                    </Typography>
+                  }
+                />
+                <CardContent>
+                  <OptimalSolarRecommendation />
+                </CardContent>
+              </Card>
+            </Box>
+
+            <Box sx={{ border: 1, borderRadius: 1, borderColor: '#dadce0', mt: 2 }}>
+              <Card>
+                <CardHeader
+                  action={
+                    <IconButton onClick={handleOpenDialog}>
+                      <InfoIcon />
+                    </IconButton>
+                  }
+                  title={
+                    <Typography component="p" sx={{ textTransform: 'uppercase' }}>
+                      Recommended angle setup
+                    </Typography>
+                  }
+                />
+                <CardContent sx={{ textAlign: 'center' }}>
+                  <TableContainer>
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Month</TableCell>
+                          <TableCell align="right">Angle</TableCell>
+                          <TableCell align="right">Orientation</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {data.recommends.map((item, index) => {
+                          return (
+                            <TableRow key={index}>
+                              <TableCell>
+                                <Typography variant="body1" component="p">
+                                  {item.month}
+                                </Typography>
+                              </TableCell>
+                              <TableCell align="right">
+                                <Typography variant="body1" component="p">
+                                  {item.angle}
+                                </Typography>
+                              </TableCell>
+                              <TableCell align="right">
+                                <Typography variant="body1" component="p">
+                                  {item.orientation === 'N' ? 'North' : 'South'}
+                                </Typography>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </CardContent>
+              </Card>
+            </Box>
+
+            {/* <Box sx={{ border: 1, borderRadius: 1, borderColor: '#dadce0', mt: 2 }}>
             <Card>
               <CardHeader
                 title={
@@ -354,8 +384,9 @@ const Report = (props: Props & EventProps) => {
                 <PotentialSolarGenerationInYourRegion />
               </CardContent>
             </Card>
-          </Box>
-        </Paper>
+          </Box> */}
+          </Paper>
+        )}
       </Container>
       <AlertDialog open={openDialog} setOpen={setOpenDialog} />
     </div>
