@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { TITLE, recommends } from '../../utils/constants';
-import { BarChart } from '../../components/bar-chart'
+import { BarChart } from '../../components/bar-chart';
 import {
   Card,
   CardHeader,
@@ -25,11 +25,10 @@ interface Props {
 }
 
 const Report = (props: Props) => {
-
   const handleBack = () => {
     const { setStep } = props;
     setStep(1);
-  }
+  };
 
   return (
     <div>
@@ -39,7 +38,6 @@ const Report = (props: Props) => {
         <meta name="viewport" content="width=device-width" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
 
       <Container maxWidth="sm" component="main">
         <Box sx={{ py: 2 }}>
@@ -56,11 +54,7 @@ const Report = (props: Props) => {
                     <InfoIcon />
                   </IconButton>
                 }
-                title={
-                  <Typography component="p">
-                    YOUR INFORMATION
-                  </Typography>
-                }
+                title={<Typography component="p">YOUR INFORMATION</Typography>}
               />
               <CardContent sx={{ textAlign: 'center' }}>
                 <TableContainer>
@@ -119,11 +113,7 @@ const Report = (props: Props) => {
                     <InfoIcon />
                   </IconButton>
                 }
-                title={
-                  <Typography component="p">
-                    SUNSHINE LAST YEAR
-                  </Typography>
-                }
+                title={<Typography component="p">SUNSHINE LAST YEAR</Typography>}
               />
               <CardContent sx={{ textAlign: 'center' }}>
                 <BarChart />
@@ -139,11 +129,7 @@ const Report = (props: Props) => {
                     <InfoIcon />
                   </IconButton>
                 }
-                title={
-                  <Typography component="p">
-                    SOLAR PANEL INSTALLATION
-                  </Typography>
-                }
+                title={<Typography component="p">SOLAR PANEL INSTALLATION</Typography>}
               />
               <CardContent sx={{ textAlign: 'center' }}>
                 <TableContainer>
@@ -205,11 +191,7 @@ const Report = (props: Props) => {
                     <InfoIcon />
                   </IconButton>
                 }
-                title={
-                  <Typography component="p">
-                    RECOMMEND SETUP
-                  </Typography>
-                }
+                title={<Typography component="p">RECOMMEND SETUP</Typography>}
               />
               <CardContent sx={{ textAlign: 'center' }}>
                 <TableContainer>
@@ -247,9 +229,8 @@ const Report = (props: Props) => {
                               </Typography>
                             </TableCell>
                           </TableRow>
-                        )
+                        );
                       })}
-
                     </TableBody>
                   </Table>
                 </TableContainer>

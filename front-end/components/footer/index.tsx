@@ -8,9 +8,9 @@ export function Footer() {
         <Divider />
       </Box>
 
-      <Box component='footer' sx={{ p: 4, textAlign: 'center' }}>
+      <Box component="footer" sx={{ p: 4, textAlign: 'center' }}>
         © {year} HackOnCloud team. All rights reserved.
       </Box>
     </>
-  )
+  );
 }

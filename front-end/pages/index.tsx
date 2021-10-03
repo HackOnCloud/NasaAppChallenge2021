@@ -1,14 +1,14 @@
 import { NextPage } from 'next';
 import { useEffect, useState, useRef } from 'react';
-import { Form } from '../containers/form'
-import { Report } from '../containers/report'
+import { Form } from '../containers/form';
+import { Report } from '../containers/report';
 
 const Home: NextPage = () => {
   const [step, setStep] = useState(1);
 
   const handleGotoStep = (step) => {
     setStep(step);
-  }
+  };
 
   return (
     <>

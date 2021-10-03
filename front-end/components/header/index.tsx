@@ -10,15 +10,14 @@ import { Drawer, Divider, List, ListItemButton, ListItemIcon, ListItemText } fro
 import HomeIcon from '@mui/icons-material/Home';
 import ContactsIcon from '@mui/icons-material/Contacts';
 
-
 export function Header() {
   const [openDrawer, setOpenDrawer] = useState(false);
 
   const toggleDrawer = (val) => {
     return () => {
       setOpenDrawer(val);
-    }
-  }
+    };
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -40,15 +39,8 @@ export function Header() {
         </Toolbar>
       </AppBar>
 
-      <Drawer
-        anchor={'left'}
-        open={openDrawer}
-        onClose={toggleDrawer(false)}
-      >
-        <Box
-          sx={{ width: 250 }}
-          role="presentation"
-        >
+      <Drawer anchor={'left'} open={openDrawer} onClose={toggleDrawer(false)}>
+        <Box sx={{ width: 250 }} role="presentation">
           <Toolbar sx={{ mt: 1 }}>
             <Box sx={{ mr: 1 }}>
               <img width={50} height={50} src="/logo/192x192.png" alt="HackOnCloud" />
