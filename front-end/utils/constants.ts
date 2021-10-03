@@ -10,9 +10,9 @@ export const SECOND_FORM_NAME = 'Sunshine Visualisation and Solar Panel Recommen
 
 export const COUNTRIES: Data[] = [{ name: 'Singapore', code: 'SG' }];
 
-export const enum FORM_STEP {
-  FIRST = 1,
-  SECOND = 2,
+export const FORM_STEP = {
+  FIRST: 1,
+  SECOND: 2,
 };
 
 export const CONTACT_LINK =
@@ -32,19 +32,16 @@ export const recommends = [
     month: 'Jan',
     angle: '5',
     orientation: 'North',
-    saving: '$100',
   },
   {
     month: 'Feb',
     angle: '5',
     orientation: 'North',
-    saving: '$100',
   },
   {
     month: 'Mar',
     angle: '5',
     orientation: 'South',
-    saving: '$100',
   },
   {
     month: 'Apr',
@@ -56,49 +53,41 @@ export const recommends = [
     month: 'May',
     angle: '5',
     orientation: 'North',
-    saving: '$100',
   },
   {
     month: 'Jun',
     angle: '5',
     orientation: 'North',
-    saving: '$100',
   },
   {
     month: 'Jul',
     angle: '5',
     orientation: 'South',
-    saving: '$200',
   },
   {
     month: 'Aug',
     angle: '5',
     orientation: 'South',
-    saving: '$200',
   },
   {
     month: 'Sep',
     angle: '5',
     orientation: 'South',
-    saving: '$200',
   },
   {
     month: 'Oct',
     angle: '5',
     orientation: 'South',
-    saving: '$200',
   },
   {
     month: 'Nov',
     angle: '5',
     orientation: 'South',
-    saving: '$200',
   },
   {
     month: 'Dec',
     angle: '5',
     orientation: 'South',
-    saving: '$200',
   },
 ];
 
