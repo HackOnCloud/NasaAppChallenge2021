@@ -230,8 +230,8 @@ const Form = (props: Props & EvenProps) => {
     const searchParams = new URLSearchParams(paramsObj);
 
     console.log(searchParams.toString());
-    // !isInvalid && setStep(FORM_STEP.SECOND);
-    setStep(FORM_STEP.SECOND);
+    !isInvalid && setStep(FORM_STEP.SECOND);
+    // setStep(FORM_STEP.SECOND);
   };
 
   const detailRetailer = PANEL_PROVIDER[provider];
