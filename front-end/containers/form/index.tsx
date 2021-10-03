@@ -3,8 +3,7 @@ import Head from 'next/head';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import styles from '../../styles/Home.module.css';
-import { API_KEY, TITLE } from '../../utils/constants';
-import { COUNTRIES, SOLAR_PANEL_PROVIDERS, PANEL_PROVIDER } from '../../utils/constants';
+import { API_KEY, FORM_STEP, TITLE, COUNTRIES, SOLAR_PANEL_PROVIDERS, PANEL_PROVIDER } from '../../utils/constants';
 import {
   Button,
   Box,
@@ -25,7 +24,7 @@ import {
 import type { TextFieldProps } from '@mui/material';
 import { loadAsyncScript } from '../../utils/load-script';
 import style from '../../styles/Home.module.css';
-import { Header } from '../../components/header';
+import { PrimaryHeader } from '../../components/header';
 
 interface GeographicCoordinate {
   lng?: number;
@@ -128,14 +127,14 @@ const Form = (props: Props) => {
     const searchParams = new URLSearchParams(paramsObj);
 
     console.log(searchParams.toString());
-    setStep(2);
+    setStep(FORM_STEP.SECOND);
   };
 
   const detailRetailer = PANEL_PROVIDER[provider];
 
   return (
     <>
-      <Header />
+      <PrimaryHeader />
       <div className={styles.container}>
         <Head>
           <title>{TITLE}</title>

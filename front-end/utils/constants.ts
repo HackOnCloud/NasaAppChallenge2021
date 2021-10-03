@@ -6,6 +6,11 @@ export const TEAM_NAME = 'HackOnCloud';
 
 export const COUNTRIES: Data[] = [{ name: 'Singapore', code: 'SG' }];
 
+export const enum FORM_STEP {
+  FIRST = 1,
+  SECOND = 2,
+};
+
 export const CONTACT_LINK =
   'https://2021.spaceappschallenge.org/challenges/statements/you-are-my-sunshine/teams/hack-on-cloud/members';
 

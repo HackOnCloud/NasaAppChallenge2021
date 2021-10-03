@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { TITLE, recommends } from '../../utils/constants';
+import { TITLE, recommends, FORM_STEP } from '../../utils/constants';
 import { BarChart } from '../../components/bar-chart';
 import {
   Card,
@@ -19,6 +19,7 @@ import {
 } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { SecondaryHeader } from '../../components/header'
 
 interface Props {
   setStep: (step) => void;
@@ -27,7 +28,7 @@ interface Props {
 const Report = (props: Props) => {
   const handleBack = () => {
     const { setStep } = props;
-    setStep(1);
+    setStep(FORM_STEP.FIRST);
   };
 
   return (
@@ -39,12 +40,8 @@ const Report = (props: Props) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Container maxWidth="sm" component="main">
-        <Box sx={{ py: 2 }}>
-          <IconButton onClick={handleBack}>
-            <ArrowBackIcon />
-          </IconButton>
-        </Box>
+      <SecondaryHeader onClick={handleBack} />
+      <Container maxWidth="sm" component="main" sx={{ my: 2 }}>
         <Paper elevation={0}>
           <Box sx={{ border: 1, borderRadius: 1, borderColor: '#dadce0' }}>
             <Card>
