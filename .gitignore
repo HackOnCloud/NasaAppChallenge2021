@@ -12,6 +12,7 @@
 */**/**/.next/
 */**/**/src/.next/
 */**/**/out/
+*/**/**/public/*.js
 
 # production
 /build

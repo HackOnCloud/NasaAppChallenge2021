@@ -25,22 +25,39 @@ import type { TextFieldProps } from '@mui/material';
 import { loadAsyncScript } from '../../utils/load-script';
 import style from '../../styles/Home.module.css';
 import { PrimaryHeader } from '../../components/header';
+import { GeographicCoordinate } from '../../utils/interface';
 
-interface GeographicCoordinate {
-  lng?: number;
-  lat?: number;
-}
 
 interface Props {
+  country?: string;
+  address?: string;
+  coordinate?: GeographicCoordinate;
+  averageBill?: string;
+  provider?: string;
+  duration?: string;
+}
+
+interface EvenProps {
+  setCountry: (value) => void;
+  setAddress: (value) => void;
+  setProvider: (value) => void;
+  setDuration: (value) => void;
+  setAverageBill: (value) => void;
+  setCoordinate: (value: GeographicCoordinate) => void;
   setStep: (step) => void;
 }
 
-const Form = (props: Props) => {
-  const [autoComplete, setAutoComplete] = useState(null);
-  const [country, setCountry] = useState('');
-  const [provider, setProvider] = useState('');
-  const [coordinate, setCoordinate] = useState<GeographicCoordinate>({});
+const Form = (props: Props & EvenProps) => {
+  const {
+    country, setCountry,
+    address, setAddress,
+    provider, setProvider,
+    averageBill, setAverageBill,
+    duration, setDuration,
+    coordinate, setCoordinate,
+  } = props;
 
+  const [autoComplete, setAutoComplete] = useState(null);
   const addressId = 'address';
   const monthlyBillId = 'monthlyBill';
   const solarPanelDurationId = 'solarPanelDuration';
@@ -52,54 +69,80 @@ const Form = (props: Props) => {
     size: 'small',
   };
 
-  useEffect(() => {
-    loadAsyncScript(`https://maps.googleapis.com/maps/api/js?key=${API_KEY}&libraries=places`, () => {
-      if (window.google) {
-        const input = document.getElementById(addressId) as HTMLInputElement;
+  const initGoogleMapPlaceAutocomplete = () => {
+    const input = document.getElementById(addressId) as HTMLInputElement;
 
-        const options = {
-          fields: ['formatted_address', 'geometry', 'name'],
-          strictBounds: false,
-          types: ['establishment'],
-        };
-        const autocomplete = new google.maps.places.Autocomplete(input, options);
-        setAutoComplete(autocomplete);
+    const options = {
+      fields: ['formatted_address', 'geometry', 'name'],
+      strictBounds: false,
+      types: ['establishment'],
+    };
 
-        autocomplete.addListener('place_changed', () => {
-          const {
-            geometry: {
-              location: { lat, lng },
-            },
-          } = autocomplete.getPlace();
-          console.log('asdasd', {
-            lat: lat(),
-            lng: lng(),
-          });
-
-          setCoordinate({
-            lat: lat(),
-            lng: lng(),
-          });
-        });
+    if (country) {
+      options['componentRestrictions'] = {
+        country,
       }
+    }
+
+    const autocomplete = new google.maps.places.Autocomplete(input, options);
+    setAutoComplete(autocomplete);
+    autocomplete.setComponentRestrictions
+
+    autocomplete.addListener('place_changed', () => {
+      const {
+        geometry: {
+          location: { lat, lng },
+        },
+        name,
+        formatted_address,
+      } = autocomplete.getPlace();
+      console.log(autocomplete.getPlace())
+      setAddress(`${name} - ${formatted_address}`);
+      setCoordinate({ lat: lat(), lng: lng() });
     });
-  }, []);
+  }
+
+  useEffect(() => {
+    if (!window.google) {
+      loadAsyncScript(`https://maps.googleapis.com/maps/api/js?key=${API_KEY}&libraries=places`, () => {
+        initGoogleMapPlaceAutocomplete();
+      });
+    } else {
+      initGoogleMapPlaceAutocomplete();
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const theme = useTheme();
   const isAboveSm = useMediaQuery(theme.breakpoints.up('sm'));
 
   const handleChangeCountry = (e) => {
     setCountry(e.target.value);
-    const restrictions = {
-      country: e.target.value,
-    };
+    let options = null;
 
-    autoComplete.setComponentRestrictions(restrictions);
+    if (e.target.value) {
+      options = {
+        country: e.target.value,
+      };
+    }
+
+    autoComplete.setComponentRestrictions(options);
   };
 
   const handleChangeRetailer = (e) => {
     setProvider(e.target.value);
   };
+
+  const handleChangeAvgBill = (e) => {
+    setAverageBill(e.target.value);
+  }
+
+  const handleChangeAddress = (e) => {
+    setAddress(e.target.value);
+  }
+
+  const handleChangeDuration = (e) => {
+    setDuration(e.target.value);
+  }
 
   const handleSubmit = () => {
     const { setStep } = props;
@@ -135,7 +178,7 @@ const Form = (props: Props) => {
   return (
     <>
       <PrimaryHeader />
-      <div className={styles.container}>
+      <Box className={styles.container} sx={{ my: 4 }}>
         <Head>
           <title>{TITLE}</title>
           <meta name="description" content={TITLE} />
@@ -156,11 +199,14 @@ const Form = (props: Props) => {
 
                   <Box sx={{ px: 2, pt: 2 }}>
                     <Typography variant="h6" component="h6">
-                      Enter information
+                      We will need to know a bit more about you so that you can
                     </Typography>
 
                     <Typography variant="subtitle2" component="p" sx={{ fontStyle: 'italic', fontWeight: 'normal' }}>
-                      to estimate your solar plan
+                      View sunshine information in your area in the past year
+                    </Typography>
+                    <Typography variant="subtitle2" component="p" sx={{ fontStyle: 'italic', fontWeight: 'normal' }}>
+                      View our recommendations on solar panel installation based on your needs
                     </Typography>
                   </Box>
 
@@ -193,7 +239,31 @@ const Form = (props: Props) => {
                     </Box>
 
                     <Box sx={{ mt: 4 }}>
-                      <TextField id={addressId} {...inputProps} label="Home Address" />
+                      <TextField
+                        {...inputProps}
+                        id={addressId}
+                        value={address}
+                        onChange={handleChangeAddress}
+                        label="Home Address"
+                      />
+                    </Box>
+
+                    <Box sx={{ mt: 4 }}>
+                      <TextField
+                        {...inputProps}
+                        label="Average Electric Bill"
+                        value={averageBill}
+                        id={monthlyBillId}
+                        type="number"
+                        onChange={handleChangeAvgBill}
+                        InputProps={{
+                          startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                          endAdornment: <InputAdornment position="end">/mo</InputAdornment>,
+                          inputProps: {
+                            min: 0,
+                          },
+                        }}
+                      />
                     </Box>
 
                     <Box sx={{ mt: 4 }}>
@@ -234,25 +304,11 @@ const Form = (props: Props) => {
                     <Box sx={{ mt: 4 }}>
                       <TextField
                         {...inputProps}
-                        label="Average Electric Bill"
-                        id={monthlyBillId}
-                        type="number"
-                        InputProps={{
-                          startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                          endAdornment: <InputAdornment position="end">/mo</InputAdornment>,
-                          inputProps: {
-                            min: 0,
-                          },
-                        }}
-                      />
-                    </Box>
-
-                    <Box sx={{ mt: 4 }}>
-                      <TextField
-                        {...inputProps}
                         label="Solar Panel Duration"
                         id={solarPanelDurationId}
                         type="number"
+                        value={duration}
+                        onChange={handleChangeDuration}
                         InputProps={{
                           inputProps: {
                             min: 1,
@@ -280,7 +336,7 @@ const Form = (props: Props) => {
             </Box>
           </Paper>
         </Container>
-      </div>
+      </Box>
     </>
   );
 };

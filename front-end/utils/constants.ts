@@ -2,7 +2,11 @@ export const API_KEY = 'AIzaSyABoVT1jKGPYpqaCxNOc7UvfTHQgKM0GtA';
 
 export const TITLE = 'You are my sunshine';
 
+export const MAIN_COLOR = '#556cd6'
+
 export const TEAM_NAME = 'HackOnCloud';
+
+export const SECOND_FORM_NAME = 'Sunshine Visualisation and Solar Panel Recommendation';
 
 export const COUNTRIES: Data[] = [{ name: 'Singapore', code: 'SG' }];
 
