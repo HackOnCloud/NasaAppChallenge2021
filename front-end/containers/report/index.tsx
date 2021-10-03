@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { TITLE, recommends, FORM_STEP } from '../../utils/constants';
-import { BarChart } from '../../components/bar-chart';
+import { BarChartByMonth, BarChartByWeek } from '../../components/bar-chart';
 import {
   Card,
   CardHeader,
@@ -16,10 +16,13 @@ import {
   TableRow,
   TableCell,
   TableHead,
+  Tabs,
+  Tab,
 } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import { SecondaryHeader } from '../../components/header'
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { TabPanel } from '../../components/tab-panel';
 
 interface Props {
   address: string;
@@ -32,6 +35,7 @@ interface EventProps {
 }
 
 const Report = (props: Props & EventProps) => {
+  const [tabIndex, setTabIndex] = React.useState(0);
   const { address, provider, averageBill } = props;
   const handleBack = () => {
     const { setStep } = props;
@@ -40,6 +44,10 @@ const Report = (props: Props & EventProps) => {
 
   useEffect(() => {
   }, []);
+
+  const handleChangeTab = (event: React.SyntheticEvent, newValue: number) => {
+    setTabIndex(newValue);
+  };
 
   return (
     <div>
@@ -51,16 +59,11 @@ const Report = (props: Props & EventProps) => {
       </Head>
 
       <SecondaryHeader onClick={handleBack} />
-      <Container maxWidth="sm" component="main" sx={{ my: 4 }}>
+      <Container maxWidth="md" component="main" sx={{ my: 4 }}>
         <Paper elevation={0}>
           <Box sx={{ border: 1, borderRadius: 1, borderColor: '#dadce0' }}>
             <Card>
               <CardHeader
-                action={
-                  <IconButton>
-                    <InfoIcon />
-                  </IconButton>
-                }
                 title={
                   <Typography component="p" sx={{ textTransform: 'uppercase' }}>
                     What we know about you
@@ -105,19 +108,6 @@ const Report = (props: Props & EventProps) => {
                           </Typography>
                         </TableCell>
                       </TableRow>
-
-                      <TableRow>
-                        <TableCell>
-                          <Typography variant="h6" component="h6">
-                            Saving per month
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="right">
-                          <Typography variant="body1" component="p">
-                            $100
-                          </Typography>
-                        </TableCell>
-                      </TableRow>
                     </TableBody>
                   </Table>
                 </TableContainer>
@@ -128,30 +118,6 @@ const Report = (props: Props & EventProps) => {
           <Box sx={{ border: 1, borderRadius: 1, borderColor: '#dadce0', mt: 2 }}>
             <Card>
               <CardHeader
-                action={
-                  <IconButton>
-                    <InfoIcon />
-                  </IconButton>
-                }
-                title={
-                  <Typography component="p" sx={{ textTransform: 'uppercase' }}>
-                    Sunshine in your area
-                  </Typography>}
-              />
-              <CardContent sx={{ textAlign: 'center' }}>
-                <BarChart />
-              </CardContent>
-            </Card>
-          </Box>
-
-          <Box sx={{ border: 1, borderRadius: 1, borderColor: '#dadce0', mt: 2 }}>
-            <Card>
-              <CardHeader
-                action={
-                  <IconButton>
-                    <InfoIcon />
-                  </IconButton>
-                }
                 title={
                   <Typography component="p" sx={{ textTransform: 'uppercase' }}>
                     Setup to cover your needs
@@ -165,12 +131,38 @@ const Report = (props: Props & EventProps) => {
                       <TableRow>
                         <TableCell>
                           <Typography variant="h6" component="h6">
+                            Solar panel area
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                          <Typography variant="body1" component="p">
+                            100m<sup>2</sup>
+                          </Typography>
+                        </TableCell>
+                      </TableRow>
+
+                      <TableRow>
+                        <TableCell>
+                          <Typography variant="h6" component="h6">
+                            Number of solar panels
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                          <Typography variant="body1" component="p">
+                            5
+                          </Typography>
+                        </TableCell>
+                      </TableRow>
+
+                      <TableRow>
+                        <TableCell>
+                          <Typography variant="h6" component="h6">
                             Cost
                           </Typography>
                         </TableCell>
                         <TableCell align="right">
                           <Typography variant="body1" component="p">
-                            1000 SGD
+                            $1000
                           </Typography>
                         </TableCell>
                       </TableRow>
@@ -181,12 +173,25 @@ const Report = (props: Props & EventProps) => {
                             Maintenance
                           </Typography>
                           <Typography variant="subtitle1" component="span">
-                            Once every 5 years
+                            Once every year
                           </Typography>
                         </TableCell>
                         <TableCell align="right">
                           <Typography variant="body1" component="p">
-                            1000 SGD
+                            $1000
+                          </Typography>
+                        </TableCell>
+                      </TableRow>
+
+                      <TableRow>
+                        <TableCell>
+                          <Typography variant="h6" component="h6">
+                            Saving per month
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="right">
+                          <Typography variant="body1" component="p">
+                            $100
                           </Typography>
                         </TableCell>
                       </TableRow>
@@ -207,6 +212,38 @@ const Report = (props: Props & EventProps) => {
                   </Table>
                 </TableContainer>
               </CardContent>
+            </Card>
+          </Box>
+
+          <Box sx={{ border: 1, borderRadius: 1, borderColor: '#dadce0', mt: 2 }}>
+
+            <Card>
+              <CardHeader
+                title={
+                  <Typography component="p" sx={{ textTransform: 'uppercase' }}>
+                    Sunshine in your area
+                  </Typography>}
+              />
+              <Tabs value={tabIndex} onChange={handleChangeTab} >
+                <Tab label="By Month" />
+                <Tab label="By Week" />
+              </Tabs>
+
+              <TabPanel value={tabIndex} index={0}>
+                <Card>
+                  <CardContent>
+                    <BarChartByMonth />
+                  </CardContent>
+                </Card>
+              </TabPanel>
+
+              <TabPanel value={tabIndex} index={1}>
+                <Card>
+                  <CardContent>
+                    <BarChartByWeek />
+                  </CardContent>
+                </Card>
+              </TabPanel>
             </Card>
           </Box>
 

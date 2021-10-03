@@ -26,6 +26,7 @@ import { loadAsyncScript } from '../../utils/load-script';
 import style from '../../styles/Home.module.css';
 import { PrimaryHeader } from '../../components/header';
 import { GeographicCoordinate } from '../../utils/interface';
+import { EMPTY_WARNING_MESSAGE } from '../../utils/constants';
 
 
 interface Props {
@@ -56,6 +57,11 @@ const Form = (props: Props & EvenProps) => {
     duration, setDuration,
     coordinate, setCoordinate,
   } = props;
+
+  const [errorAddress, setErrorAddress] = useState(null);
+  const [errorAvgBill, setErrorAvgBill] = useState(null);
+  const [errorSolarPanelProvider, setErrorSolarPanelProvider] = useState(null);
+  const [errorDuration, setErrorDuration] = useState(null);
 
   const [autoComplete, setAutoComplete] = useState(null);
   const addressId = 'address';
@@ -115,6 +121,11 @@ const Form = (props: Props & EvenProps) => {
   const theme = useTheme();
   const isAboveSm = useMediaQuery(theme.breakpoints.up('sm'));
 
+
+  const isDisableSubmitButton = () => {
+    return errorAddress || errorAvgBill || errorSolarPanelProvider || errorDuration;
+  }
+
   const handleChangeCountry = (e) => {
     setCountry(e.target.value);
     let options = null;
@@ -128,21 +139,45 @@ const Form = (props: Props & EvenProps) => {
     autoComplete.setComponentRestrictions(options);
   };
 
-  const handleChangeRetailer = (e) => {
-    setProvider(e.target.value);
-  };
+  const handleChangeAddress = (e) => {
+    setAddress(e.target.value);
+
+    let isInvalid = false;
+    if (!e.target.value) {
+      isInvalid = true;
+    }
+    setErrorAddress(isInvalid);
+  }
 
   const handleChangeAvgBill = (e) => {
     setAverageBill(e.target.value);
+
+    let isInvalid = false;
+    if (!e.target.value) {
+      isInvalid = true;
+    }
+    setErrorAvgBill(isInvalid);
   }
 
-  const handleChangeAddress = (e) => {
-    setAddress(e.target.value);
-  }
+  const handleChangeProvider = (e) => {
+    setProvider(e.target.value);
+
+    let isInvalid = false;
+    if (!e.target.value) {
+      isInvalid = true;
+    }
+    setErrorSolarPanelProvider(isInvalid);
+  };
 
   const handleChangeDuration = (e) => {
     setDuration(e.target.value);
-  }
+
+    let isInvalid = false;
+    if (!e.target.value) {
+      isInvalid = true;
+    }
+    setErrorDuration(isInvalid);
+  };
 
   const handleSubmit = () => {
     const { setStep } = props;
@@ -241,16 +276,20 @@ const Form = (props: Props & EvenProps) => {
                     <Box sx={{ mt: 4 }}>
                       <TextField
                         {...inputProps}
+                        error={errorAddress}
                         id={addressId}
                         value={address}
                         onChange={handleChangeAddress}
                         label="Home Address"
+                        helperText={errorAddress && EMPTY_WARNING_MESSAGE}
                       />
+                      {errorAddress && <FormHelperText error>{EMPTY_WARNING_MESSAGE}</FormHelperText>}
                     </Box>
 
                     <Box sx={{ mt: 4 }}>
                       <TextField
                         {...inputProps}
+                        error={errorAvgBill}
                         label="Average Electric Bill"
                         value={averageBill}
                         id={monthlyBillId}
@@ -264,6 +303,7 @@ const Form = (props: Props & EvenProps) => {
                           },
                         }}
                       />
+                      {errorAvgBill && <FormHelperText error>{EMPTY_WARNING_MESSAGE}</FormHelperText>}
                     </Box>
 
                     <Box sx={{ mt: 4 }}>
@@ -272,11 +312,12 @@ const Form = (props: Props & EvenProps) => {
                         <Select
                           labelId="demo-simple-select-autowidth-label"
                           id="demo-simple-select-autowidth"
+                          error={errorSolarPanelProvider}
                           autoWidth
                           required
                           label="Solar Panel Provider"
                           value={provider}
-                          onChange={handleChangeRetailer}
+                          onChange={handleChangeProvider}
                         >
                           <MenuItem value="">
                             <em>None</em>
@@ -290,6 +331,7 @@ const Form = (props: Props & EvenProps) => {
                         <FormHelperText>
                           Select your preferred providers in your country
                         </FormHelperText>
+                        {errorSolarPanelProvider && <FormHelperText error>{EMPTY_WARNING_MESSAGE}</FormHelperText>}
 
                         {detailRetailer && (
                           <>
@@ -310,6 +352,7 @@ const Form = (props: Props & EvenProps) => {
                         label="Expected duration of solar panel"
                         id={solarPanelDurationId}
                         type="number"
+                        error={errorDuration}
                         value={duration}
                         onChange={handleChangeDuration}
                         InputProps={{
@@ -321,10 +364,11 @@ const Form = (props: Props & EvenProps) => {
                         }}
                       />
                       <FormHelperText>Ranging from 10 - 25 years.</FormHelperText>
+                      {errorDuration && <FormHelperText error>{EMPTY_WARNING_MESSAGE}</FormHelperText>}
                     </Box>
 
                     <Box sx={{ mt: 2 }}>
-                      <Button onClick={handleSubmit} fullWidth variant="contained">
+                      <Button disabled={isDisableSubmitButton()} onClick={handleSubmit} fullWidth variant="contained">
                         Next
                       </Button>
                     </Box>
