@@ -199,14 +199,14 @@ const Form = (props: Props & EvenProps) => {
 
                   <Box sx={{ px: 2, pt: 2 }}>
                     <Typography variant="h6" component="h6">
-                      We will need to know a bit more about you so that you can
+                      A bit more about you
                     </Typography>
 
                     <Typography variant="subtitle2" component="p" sx={{ fontStyle: 'italic', fontWeight: 'normal' }}>
-                      View sunshine information in your area in the past year
+                      1. You can view sunshine information in your location in the past year
                     </Typography>
                     <Typography variant="subtitle2" component="p" sx={{ fontStyle: 'italic', fontWeight: 'normal' }}>
-                      View our recommendations on solar panel installation based on your needs
+                      2. You can view our recommendations on solar panel installation based on your needs
                     </Typography>
                   </Box>
 
@@ -287,6 +287,9 @@ const Form = (props: Props & EvenProps) => {
                             </MenuItem>
                           ))}
                         </Select>
+                        <FormHelperText>
+                          Select your preferred providers in your country
+                        </FormHelperText>
 
                         {detailRetailer && (
                           <>
@@ -304,7 +307,7 @@ const Form = (props: Props & EvenProps) => {
                     <Box sx={{ mt: 4 }}>
                       <TextField
                         {...inputProps}
-                        label="Solar Panel Duration"
+                        label="Expected duration of solar panel"
                         id={solarPanelDurationId}
                         type="number"
                         value={duration}
@@ -314,9 +317,10 @@ const Form = (props: Props & EvenProps) => {
                             min: 1,
                             max: 25,
                           },
+                          endAdornment: <InputAdornment position="end">year(s)</InputAdornment>,
                         }}
                       />
-                      <FormHelperText>Year from 1 year to 25 years</FormHelperText>
+                      <FormHelperText>Ranging from 10 - 25 years.</FormHelperText>
                     </Box>
 
                     <Box sx={{ mt: 2 }}>

@@ -122,7 +122,7 @@ const Report = (props: Props & EventProps) => {
                 }
                 title={
                   <Typography component="p" sx={{ textTransform: 'uppercase' }}>
-                    SUNSHINE LAST YEAR
+                    Sunshine in your area
                   </Typography>}
               />
               <CardContent sx={{ textAlign: 'center' }}>
@@ -139,7 +139,11 @@ const Report = (props: Props & EventProps) => {
                     <InfoIcon />
                   </IconButton>
                 }
-                title={<Typography component="p">SOLAR PANEL INSTALLATION</Typography>}
+                title={
+                  <Typography component="p" sx={{ textTransform: 'uppercase' }}>
+                    Setup to cover your needs
+                  </Typography>
+                }
               />
               <CardContent sx={{ textAlign: 'center' }}>
                 <TableContainer>
@@ -201,7 +205,9 @@ const Report = (props: Props & EventProps) => {
                     <InfoIcon />
                   </IconButton>
                 }
-                title={<Typography component="p">RECOMMEND SETUP</Typography>}
+                title={
+                  <Typography component="p" sx={{ textTransform: 'uppercase' }}>Recommended angle setup</Typography>
+                }
               />
               <CardContent sx={{ textAlign: 'center' }}>
                 <TableContainer>
