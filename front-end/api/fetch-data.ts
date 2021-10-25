@@ -1,14 +1,18 @@
+// const API_URL =
+//   'https://5j689hu1a9.execute-api.ap-southeast-1.amazonaws.com/default/nasa_monthly_climatology_point_optimal_object';
+
 const API_URL =
-  'https://5j689hu1a9.execute-api.ap-southeast-1.amazonaws.com/default/nasa_monthly_climatology_point_optimal_object';
+  'https://d5kfyabfz5.execute-api.ap-southeast-1.amazonaws.com/default/nasa_monthly_climatology_point_optimal_object_v11';
 
 export async function fetchData(postData: PostData): Promise<Data> {
   try {
-    const res = await fetch(API_URL, {
-      method: 'post',
+    const { lat: latitude, lng: longitude, provider, monthlybill, duration } = postData;
+
+    const url = `${API_URL}?lat=${latitude}&lng=${longitude}&provider=${provider}&monthlybill=${monthlybill}&duration=${duration}`;
+    const res = await fetch(url, {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(postData),
     });
 
     const data = await res.json();
